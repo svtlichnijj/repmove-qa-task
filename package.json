@@ -2,13 +2,29 @@
   "name": "repmove-qa-task",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {},
+  "type": "module",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:one": "npx playwright test --project=chromium --headed",
+    "test:headed": "npx playwright test --headed",
+    "test:report": "npx playwright show-report",
+    "lint:check": "npx eslint . --cache",
+    "lint:fix": "npx eslint . --cache --fix"
+  },
   "keywords": [],
-  "author": "",
+  "author": "Taras Svitlychnyi",
   "license": "ISC",
-  "description": "",
+  "description": "QA Automation Test Task for RepMove",
   "devDependencies": {
+    "@eslint/js": "^9.38.0",
+    "@faker-js/faker": "^10.1.0",
     "@playwright/test": "^1.56.1",
-    "@types/node": "^24.9.1"
+    "@types/node": "^24.9.1",
+    "dotenv": "^17.2.3",
+    "eslint": "^9.38.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "globals": "^16.4.0",
+    "prettier": "^3.6.2",
+    "typescript-eslint": "^8.46.2"
   }
 }
