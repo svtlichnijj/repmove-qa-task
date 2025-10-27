@@ -83,7 +83,6 @@ const COUNTRY_LOCALE_MAP: Record<string, string> = {
   in: 'en_IN',
   ie: 'en_IE',
   it: 'it',
-  mx: 'es_MX',
   nl: 'nl',
   no: 'nb_NO',
   pl: 'pl',

@@ -3,7 +3,7 @@ import { BasePage } from '~pages/common/BasePage.js';
 import { IRegisterData } from '~types/signup.js';
 
 export class RegistrationPage extends BasePage {
-  readonly signUpForm: Locator;
+  readonly signUpFormBlock: Locator;
   readonly firstNameBlock: Locator;
   readonly firstNameInput: Locator;
   readonly lastNameBlock: Locator;
@@ -25,37 +25,37 @@ export class RegistrationPage extends BasePage {
   constructor(page: Page) {
     super(page, '/auth/sign-up');
 
-    this.signUpForm = page.locator('.__form app-sign-up');
-    this.firstNameBlock = this.signUpForm.locator('app-input', { hasText: 'First Name' });
+    this.signUpFormBlock = page.locator('.__form app-sign-up');
+    this.firstNameBlock = this.signUpFormBlock.locator('app-input', { hasText: 'First Name' });
     this.firstNameInput = this.firstNameBlock.locator('input');
-    this.lastNameBlock = this.signUpForm.locator('app-input', { hasText: 'Last Name' });
+    this.lastNameBlock = this.signUpFormBlock.locator('app-input', { hasText: 'Last Name' });
     this.lastNameInput = this.lastNameBlock.locator('input');
-    this.companyNameBlock = this.signUpForm.locator('app-input', { hasText: 'Company Name' });
+    this.companyNameBlock = this.signUpFormBlock.locator('app-input', { hasText: 'Company Name' });
     this.companyNameInput = this.companyNameBlock.locator('input');
-    this.industryDropdown = this.signUpForm.getByPlaceholder('Industry');
-    this.emailBlock = this.signUpForm.locator('app-input', { hasText: 'Email' });
+    this.industryDropdown = this.signUpFormBlock.getByPlaceholder('Industry');
+    this.emailBlock = this.signUpFormBlock.locator('app-input', { hasText: 'Email' });
     this.emailInput = this.emailBlock.locator('input');
-    this.phoneBlock = this.signUpForm.locator('app-phone-number', { hasText: 'Phone' });
+    this.phoneBlock = this.signUpFormBlock.locator('app-phone-number', { hasText: 'Phone' });
     this.countryDropdown = this.phoneBlock.getByPlaceholder('Country');
     this.phoneInput = this.phoneBlock.locator('app-input input');
-    this.passwordBlock = this.signUpForm.locator('app-input', { hasText: 'Password' });
+    this.passwordBlock = this.signUpFormBlock.locator('app-input', { hasText: 'Password' });
     this.passwordInput = this.passwordBlock.locator('input');
-    this.signUpButton = this.signUpForm.getByRole('button', { name: 'Sign Up', exact: true });
+    this.signUpButton = this.signUpFormBlock.getByRole('button', { name: 'Sign Up', exact: true });
     this.signUpButtonSpinner = this.signUpButton.locator('app-loading.__spinner');
-    this.loginLink = this.signUpForm.getByRole('link', { name: 'Sign In' });
+    this.loginLink = this.signUpFormBlock.getByRole('link', { name: 'Sign In' });
   }
 
   private async selectNgDropdownOption(dropdownLocator: Locator, optionText: string) {
     await dropdownLocator.click();
-    await this.page.getByRole('listbox').getByText(optionText, { exact: true }).click();
+    await this.page.getByRole('listbox').getByText(optionText, { exact: true }).first().click();
   }
 
   async signUp(data: IRegisterData): Promise<void> {
     await this.firstNameInput.fill(data.firstName);
     await this.lastNameInput.fill(data.lastName);
     await this.companyNameInput.fill(data.companyName);
-    await this.emailInput.fill(data.email);
     await this.selectNgDropdownOption(this.industryDropdown, data.industry);
+    await this.emailInput.fill(data.email);
     await this.selectNgDropdownOption(this.countryDropdown, data.countryCode);
     await this.phoneInput.fill(data.phoneNumber);
     await this.passwordInput.fill(data.password);
@@ -67,7 +67,10 @@ export class RegistrationPage extends BasePage {
   }
 
   async spinnerIsNotVisible(): Promise<void> {
-    await expect(this.signUpButtonSpinner).not.toBeVisible({ timeout: Number(process.env.DEFAULT_TIMEOUT) || 15000 });
+    await expect(this.signUpButtonSpinner).toBeVisible({
+      timeout: Number(process.env.LONG_TIMEOUT) || 30000,
+      visible: false,
+    });
   }
 
   async dataHasBeenSent(): Promise<void> {
@@ -83,6 +86,16 @@ export class RegistrationPage extends BasePage {
       if (block != this.industryDropdown) {
         await expect(block.locator(this.blockErrorMessageLocator)).toBeVisible();
       }
+    }
+  }
+
+  async expectFieldHaveErrorText(block: Locator, message: string): Promise<void> {
+    await expect(block).toContainClass(this.blockInvalidClass);
+    await expect(block).not.toContainClass(this.blockValidClass);
+
+    if (block != this.industryDropdown) {
+      await expect(block.locator(this.blockErrorMessageLocator)).toBeVisible();
+      await expect(block.locator(this.blockErrorMessageLocator)).toHaveText(message);
     }
   }
 }
