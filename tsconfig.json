@@ -14,5 +14,5 @@
       "~types/*": ["types/*"]
     }
   },
-  "include": ["tests/**/*.ts", "pages/**/*.ts", "utils/**/*.ts", "types/**/*.ts", "playwright.config.ts"]
+  "include": ["tests/**/*.ts", "pages/**/*.ts", "utils/*.ts", "types/*.ts", "playwright.config.ts"]
 }

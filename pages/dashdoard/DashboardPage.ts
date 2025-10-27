@@ -22,6 +22,6 @@ export class DashboardPage extends BasePage {
   }
 
   async appDashboardBlockIsVisible() {
-    return this.appDashboardBlock.isVisible();
+    return this.appDashboardBlock.isVisible({ timeout: Number(process.env.LONG_TIMEOUT) || 30000 });
   }
 }

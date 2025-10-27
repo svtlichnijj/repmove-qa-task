@@ -4,12 +4,22 @@ import type { IRegisterData } from '../types/signup.js';
 
 export function generateRegisterData(): IRegisterData {
   const countryLocale = faker.helpers.arrayElement(Object.keys(constants.COUNTRY_LOCALE_MAP));
+  console.log(`- countryLocale: ${countryLocale}`);
   const countryCode = constants.COUNTRY_CODES_MAP[countryLocale as keyof typeof constants.COUNTRY_CODES_MAP];
 
   const localeKey = constants.COUNTRY_LOCALE_MAP[countryLocale];
+  console.log(`-- localeKey: ${localeKey}`);
   const locale = allLocales[localeKey as keyof typeof allLocales];
-  const localizedFaker = localeKey == 'en_US' ? faker : new Faker({ locale });
-  const phoneNumber = localizedFaker.phone.number({ style: 'international' }).replace(countryCode, '');
+  const localizedFaker = new Faker({ locale });
+  let phoneNumber = '';
+
+  if (localizedFaker.phone == undefined) {
+    throw new Error('localizedFaker.phone is undefined');
+  } else if (localizedFaker.phone.number == undefined) {
+    throw new Error('localizedFaker.phone.number is undefined');
+  } else {
+    phoneNumber = localizedFaker.phone.number({ style: 'international' }).replace(countryCode, '');
+  }
 
   const password = faker.internet.password({ length: 10, prefix: 'Test!' });
 

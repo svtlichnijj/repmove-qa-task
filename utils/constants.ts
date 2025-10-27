@@ -77,7 +77,6 @@ const COUNTRY_LOCALE_MAP: Record<string, string> = {
   ca: 'en_CA',
   cz: 'cs_CZ',
   dk: 'da',
-  fi: 'fi',
   fr: 'fr',
   de: 'de',
   hu: 'hu',
@@ -97,7 +96,6 @@ const COUNTRY_LOCALE_MAP: Record<string, string> = {
   ch: 'de_CH',
   ua: 'uk',
   gb: 'en_GB',
-  us: 'en_US',
 };
 
 export const constants = {

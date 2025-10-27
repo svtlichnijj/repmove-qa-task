@@ -11,6 +11,7 @@ export class LoginPage extends BasePage {
   readonly loginButton: Locator;
   readonly loginButtonSpinner: Locator;
   readonly signUpLink: Locator;
+  readonly forgotPasswordLink: Locator;
 
   constructor(page: Page) {
     super(page, '/auth/sign-in');
@@ -24,6 +25,7 @@ export class LoginPage extends BasePage {
     this.loginButton = page.getByRole('button', { name: 'Sign In', exact: true });
     this.loginButtonSpinner = this.loginButton.locator('app-loading.__spinner');
     this.signUpLink = page.getByRole('link', { name: 'Sign Up Now' });
+    this.forgotPasswordLink = page.getByRole('button', { name: 'Forgot password' });
   }
 
   async login(email: string, password: string): Promise<void> {
@@ -59,7 +61,7 @@ export class LoginPage extends BasePage {
     await expect(this.passwordValidationError).toHaveText(message);
   }
 
-  async clickSignUpLink(): Promise<void> {
-    await this.signUpLink.click();
+  async clickForgotPasswordLink(): Promise<void> {
+    await this.forgotPasswordLink.click();
   }
 }
